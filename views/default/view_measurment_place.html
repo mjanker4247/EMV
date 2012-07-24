@@ -1,0 +1,9 @@
+{{extend 'layout.html'}}
+<h1><a href="{{=measurement_place.url or '#'}}">{{=measurement_place.name}}</a></h1>
+
+{{=button('edit','edit_measurement_place',measurement_place.id)}}
+{{=button('instrumentss','list_instruments',measurement_place.id)}}
+
+{{=crud.read(db.measurement_place,measurement_place)}}
+
+{{=tag('measurement_place',measurement_place.id)}}

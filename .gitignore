@@ -1,0 +1,7 @@
+*.pyc
+cache/
+databases/*
+errors/
+sessions/
+uploads/*
+.hg/
