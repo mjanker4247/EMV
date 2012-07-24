@@ -50,20 +50,9 @@ def edit_measurement_place():
 
 @auth.requires_login()
 def list_instruments():
-    measurement_place_id=request.args(0)
-    measurement_place=db.measurement_place[measurement_place_id]
-    if measurement_place:
-        session.recent_measurement_places = add(session.recent_measurement_places,measurement_place)
-        db.instrument.measurement_place.default=measurement_place_id
-        db.instrument.measurement_place.writable=False
-        db.instrument.measurement_place.readable=False
-        form=crud.create(db.instrument)
-        instruments=db(db.instrument.measurement_place==measurement_place.id)\
-            .select(orderby=db.instrument.name)
-    else:
-        form=None
-        instruments=db(db.instrument.id>0).select(orderby=db.instrument.name)
-    return dict(measurement_place=measurement_place,instruments=instruments,form=form)
+    form=crud.create(db.instrument)
+    instruments=db(db.instrument.id>0).select(orderby=db.instrument.name)
+    return dict(instruments=instruments,form=form)
 
 @auth.requires_login()
 def view_instrument():
@@ -71,6 +60,17 @@ def view_instrument():
     instrument=db.instrument[instrument_id] or redirect(error_page)
     session.recent_instruments = add(session.recent_instruments,instrument)
     return dict(instrument=instrument)
+	
+@auth.requires_login()
+def edit_instrument():
+    instrument_id=request.args(0)
+    instrument=db.instrument[instrument_id] or redirect(error_page)
+    session.recent_instruments = add(session.recent_instruments,instrument)
+    db.instrument.measurement_place.writable=False
+    db.instrument.measurement_place.readable=False
+    form=crud.update(db.instrument,instrument,next=url('view_instrument',instrument_id))
+    return dict(form=form)
+
 
 @auth.requires_login()
 def list_docs():
@@ -95,16 +95,6 @@ def list_logs():
     form=crud.create(db.log)
     logs=db(db.log.instrument==instrument.id).select(orderby=~db.log.created_on)
     return dict(instrument=instrument,logs=logs,form=form)
-
-@auth.requires_login()
-def edit_instrument():
-    instrument_id=request.args(0)
-    instrument=db.instrument[instrument_id] or redirect(error_page)
-    session.recent_instruments = add(session.recent_instruments,instrument)
-    db.instrument.measurement_place.writable=False
-    db.instrument.measurement_place.readable=False
-    form=crud.update(db.instrument,instrument,next=url('view_instrument',instrument_id))
-    return dict(form=form)
 
 
 @auth.requires_login()

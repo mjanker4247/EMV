@@ -2,28 +2,24 @@
 {{response.files.append(URL(r=request,c='static',f='demo_table.css'))}}
 {{extend 'layout.html'}}
 <script>
-jQuery(document).ready(function(){
+$(document).ready(function(){
    jQuery('.smarttable').dataTable();
    {{if form and not form.errors:}}jQuery('#form').hide();{{pass}}
 });
 </script>
-{{if measurement_place:}}
-<h1>Instruments at {{=link_measurement_place(measurement_place)}}</h1>
+<h1>List Instruments</h1>
 
 [<a href="#nil" onclick="jQuery('#form').slideToggle();">toggle</a>]
 <div id="form">
 <h2>New Instrument</h2>
 {{=form}}
 </div>
-{{else:}}
-<h1>All Instruments</h1>
-{{pass}}
 
 <br /><br />
 <table class="smarttable">
 <thead>
   <tr>
-    <th>Name</th><th>ID</th><th>Measurement Place</th><th>Status</th>
+    <th>Name</th><th>ID</th><th>Action</th>
   </tr>
 </thead>
 <tbody>
@@ -31,7 +27,6 @@ jQuery(document).ready(function(){
 <tr>
 <td>{{=instrument.name}}</td>
 <td>{{=instrument.id_number}}</td>
-<td>{{=cache.ram('c%s'%instrument.measurement_place, lambda:instrument.measurement_place.name,100)}}</td>
 <td>{{=button('view','view_instrument',instrument.id)}}
 {{=button('edit','edit_instrument',instrument.id)}}
 {{=button('logs','list_logs',instrument.id)}}

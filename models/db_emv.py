@@ -9,7 +9,8 @@ else:
 
 db.define_table('measurement_place',
     Field('name'),
-    Field('description'))
+    Field('description'),
+	Field('instruments', 'list:reference instrument'))
 
 db.measurement_place.name.requires=[IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'measurement_place.name')]
 
@@ -39,12 +40,11 @@ db.manufacturer.email.requires=IS_EMPTY_OR(IS_EMAIL(error_message='invalid email
 
 db.define_table('instrument',
     Field('name'),
-    Field('measurement_place',db.measurement_place),
-    Field('device_type',db.device_type),
+    Field('device_type','reference device_type'),
     Field('serial_number'),
     Field('id_number'),
     Field('cost_center'),
-    Field('manufacturer',db.manufacturer),
+    Field('manufacturer','reference manufacturer'),
     Field('calibration_interval'),
     Field('last_calibration'),
     Field('next_calibration'),
@@ -53,14 +53,13 @@ db.define_table('instrument',
     Field('created_by',db.auth_user,default=me,writable=False,readable=False),
     Field('created_on','datetime',default=request.now,writable=False,readable=False))
 
-db.instrument.name.requires=[IS_NOT_EMPTY(),IS_NOT_IN_DB(db,'instrument.name')]
-db.instrument.measurement_place.requires=IS_IN_DB(db,'measurement_place.id','%(name)s')
+db.instrument.name.requires=IS_NOT_EMPTY()
     
     
 db.define_table('task',
     Field('title'),
     Field('task_type'),
-    Field('instrument',db.instrument,default=None),
+    Field('instrument','reference instrument',default=None),
     Field('description','text'),
     Field('start_time','datetime'),
     Field('stop_time','datetime'),
@@ -75,7 +74,7 @@ db.task.stop_time.default=request.now
 
 
 db.define_table('log',
-    Field('instrument',db.instrument),
+    Field('instrument','reference instrument'),
     Field('body','text'),
     Field('created_by',db.auth_user,default=me,writable=False,readable=False),
     Field('created_on','datetime',default=request.now,writable=False,readable=False))
@@ -85,7 +84,7 @@ db.log.body.requires=IS_NOT_EMPTY()
 
 
 db.define_table('document',
-    Field('instrument',db.instrument),
+    Field('instrument','reference instrument'),
     Field('name'),
     Field('file','upload'),
     Field('created_by',db.auth_user,default=me,writable=False,readable=False),
