@@ -8,8 +8,8 @@ jQuery(document).ready(function(){
 });
 </script>
 
-{{if person:}}
-<h1>Todo Task concerning {{=link_person(person)}}</h1>
+{{if instrument:}}
+<h1>Todo Task concerning {{=link_instrument(instrument)}}</h1>
 {{=button('calendar for '+instrument.name,'calendar',instrument.id)}}
 {{else:}}
 <h1>All Todo Task</h1>

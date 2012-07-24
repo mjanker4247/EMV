@@ -1,6 +1,5 @@
 {{extend 'layout.html'}}
 <h1>{{=instrument.name}}</h1>
-<h2>{{=instrument.role}} at {{=link_measurment_place(instrument.company)}}</a></h2>
 
 {{=button('edit','edit_instrument',instrument.id)}}
 {{=button('logs','list_logs',instrument.id)}}

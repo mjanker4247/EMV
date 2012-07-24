@@ -66,8 +66,6 @@ def edit_instrument():
     instrument_id=request.args(0)
     instrument=db.instrument[instrument_id] or redirect(error_page)
     session.recent_instruments = add(session.recent_instruments,instrument)
-    db.instrument.measurement_place.writable=False
-    db.instrument.measurement_place.readable=False
     form=crud.update(db.instrument,instrument,next=url('view_instrument',instrument_id))
     return dict(form=form)
 
