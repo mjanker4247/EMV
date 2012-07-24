@@ -4,7 +4,7 @@
 {{response.files.append(URL(r=request,c='static',f='jqModal.js'))}}
 {{extend 'layout.html'}}
 <script>
-jQuery(document).ready(function(){
+$(document).ready(function(){
    jQuery('.smarttable').dataTable(); 
    {{for log in logs:}}jQuery('#dialog{{=log.id}}').jqm({trigger: '#trigger{{=log.id}}'});{{pass}}
    {{if not form.errors:}}jQuery('#form').hide();{{pass}}

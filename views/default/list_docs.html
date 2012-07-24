@@ -2,7 +2,7 @@
 {{response.files.append(URL(r=request,c='static',f='demo_table.css'))}}
 {{extend 'layout.html'}}
 <script>
-jQuery(document).ready(function(){
+$(document).ready(function(){
     jQuery('.smarttable').dataTable(); 
     {{if not form.errors:}}jQuery('#form').hide();{{pass}}
 });
