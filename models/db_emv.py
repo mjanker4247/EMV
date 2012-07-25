@@ -1,3 +1,10 @@
+def date_widget(f,v):
+    wrapper = DIV()
+    inp = SQLFORM.widgets.string.widget(f,v,_class="jqdate")
+    jqscr = SCRIPT("jQuery(document).ready(function(){jQuery('#%s').datepicker({dateFormat:'yyyy-mm-dd'});});" % inp['_id'],_type="text/javascript")
+    wrapper.components.extend([inp,jqscr])
+    return wrapper
+	
 is_phone = IS_MATCH('^(\+\d{2}\-)?[\d\-]*(\#\d+)?$')
 
 TASK_TYPES = ('Phone', 'Fax', 'Mail', 'Meet')
@@ -46,8 +53,8 @@ db.define_table('instrument',
     Field('cost_center'),
     Field('manufacturer','reference manufacturer'),
     Field('calibration_interval'),
-    Field('last_calibration'),
-    Field('next_calibration'),
+    Field('last_calibration', 'date', 'widget=date_widget'),
+    Field('next_calibration', 'date', 'widget=date_widget'),
     Field('status'),
     Field('location'),
     Field('created_by',db.auth_user,default=me,writable=False,readable=False),
